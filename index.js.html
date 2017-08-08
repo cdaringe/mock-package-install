@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>index.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-mock-package-install.html">mock-package-install</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-mock-package-install.html#.install">install</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-mock-package-install.html#.remove">remove</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-random-package-json-generator.html">random-package-json-generator</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-random-package-json-generator.html#.gen">gen</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">index.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * mock-package-install
+ * @module mock-package-install
+ */
+
+var fs = require('fs-extra')
+var path = require('path')
+var defaults = require('lodash.defaults')
+var rpkg = require('./random-package')
+
+module.exports = {
+
+/**
+ * Installs mock package into node_modules &amp; updates the corresponding package.json file
+ * @param {object} opts
+ * @param {object} [opts.package] JS object package.json. random package used if none provided
+ * @param {string} [opts.nodeModulesDir] path to node_modules dir to install mock package into. looks for cwd/node_modules by default
+ * @param {string} [opts.targetPackage] path to package.json file to update with the newly installed dependency's metadata
+ * @param {boolean} [opts.isDev] put into devDependencies vs dependencies. used only with targetPackage
+ * @example
+ * mock.install({
+ *   package: { name: 'TEST_NAME', version: 'TEST_VERSION' },
+ *   nodeModulesDir: '/path/to/target/node_modules',
+ *   targetPackage: '/path/to/target/package.json',
+ *   isDev: true
+ * })
+ * @return {object} JS object package.json
+ */
+  install: function (opts) {
+    opts = opts || {}
+    opts = defaults(opts, {
+      nodeModulesDir: path.resolve(process.cwd(), 'node_modules'),
+      package: rpkg.gen(opts.package)
+    })
+    fs.mkdirpSync(path.resolve(opts.nodeModulesDir, opts.package.name))
+    fs.writeFileSync(
+      path.resolve(opts.nodeModulesDir, opts.package.name, 'package.json'),
+      JSON.stringify(opts.package, null, 2)
+    )
+    if (opts.targetPackage) {
+      var key = opts.isDev ? 'devDependencies' : 'dependencies'
+      var targetPackage = JSON.parse(fs.readFileSync(opts.targetPackage))
+      targetPackage[key] = targetPackage[key] || {}
+      targetPackage[key][opts.package.name] = opts.package.version
+      fs.writeFileSync(opts.targetPackage, JSON.stringify(targetPackage, null, 2))
+    }
+    return opts.package
+  },
+
+  /**
+   * remove mock package
+   * @param {object} opts
+   * @param {string} opts.name package name to remove
+   * @param {string} [opts.package.name] may be used instead of opts.name for consistency w/ install API
+   * @param {string} [opts.nodeModulesDir] path to node_modules dir
+   * @param {string} [opts.targetPackage] path to package.json file to update with the newly installed dependency's metadata
+   * @param {boolean} [opts.isDev] put into devDependencies vs dependencies. used only with targetPackage
+   */
+  remove: function (opts) {
+    var name
+    if (opts &amp;&amp; opts.name) name = opts.name
+    if (opts &amp;&amp; opts.package &amp;&amp; opts.package.name) name = opts.package.name
+    if (!name) throw new TypeError('package name missing')
+    opts = defaults(opts, {
+      nodeModulesDir: path.resolve(process.cwd(), 'node_modules')
+    })
+    fs.removeSync(path.resolve(opts.nodeModulesDir, name))
+    if (opts.targetPackage) {
+      var key = opts.isDev ? 'devDependencies' : 'dependencies'
+      var targetPackage = JSON.parse(fs.readFileSync(opts.targetPackage))
+      delete targetPackage[key][name]
+      fs.writeFileSync(opts.targetPackage, JSON.stringify(targetPackage, null, 2))
+    }
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.4</a> using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
