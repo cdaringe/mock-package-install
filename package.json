@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "ava": "^0.21.0",
+    "coveralls": "^2.13.1",
     "gh-pages": "^1.0.0",
     "husky": "^0.14.3",
     "jsdoc": "^3.5.4",
