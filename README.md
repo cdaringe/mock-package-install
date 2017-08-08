@@ -4,7 +4,7 @@
 
 Generate a mock npm-like package installation.
 
-You can also update a package.json as you add/remove packages.  See [the docs](http://cdaringe.github.io/mock-packa-install/index.html)!
+You can also update a package.json as you add/remove packages.  See [the docs](http://cdaringe.github.io/mock-package-install)!
 
 ## usage
 
@@ -14,4 +14,4 @@ var mock1 = mockPackage.install() //=> node_modules/mock_package_1 now exists w/
 mockPackage.remove({ name: mock1.name }) //=> removes the pkg folder
 ```
 
-Of course this is all configurable.  Full API docs [live here](http://cdaringe.github.io/mock-package-install/index.html)
+Of course this is all configurable.  Full API docs [live here](http://cdaringe.github.io/mock-package-install)
