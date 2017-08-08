@@ -1,0 +1,50 @@
+{
+  "name": "mock-package-install",
+  "version": "0.0.0",
+  "description": "Generate a mock npm-like package installation",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "nyc ava && nyc report --reporter=lcov",
+    "lint": "standard",
+    "preversion": "git checkout master && git pull",
+    "docs:build": "mkdir -p docs && jsdoc -c .jsdoc.json src/",
+    "docs:clean": "rm -rf docs",
+    "docs:deploy": "gh-pages -d docs",
+    "postpublish": "run-s docs:clean docs:build docs:deploy docs:clean",
+    "precommit": "run-s lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cdaringe/mock-package-install.git"
+  },
+  "keywords": [
+    "npm",
+    "mock",
+    "install",
+    "package",
+    "test",
+    "testing"
+  ],
+  "author": "cdaringe",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cdaringe/mock-package-install/issues"
+  },
+  "homepage": "https://github.com/cdaringe/mock-package-install#readme",
+  "dependencies": {
+    "fs-extra": "^4.0.1",
+    "lodash.defaults": "^4.2.0"
+  },
+  "devDependencies": {
+    "ava": "^0.21.0",
+    "gh-pages": "^1.0.0",
+    "husky": "^0.14.3",
+    "jsdoc": "^3.5.4",
+    "minami": "^1.2.3",
+    "npm-run-all": "^4.0.2",
+    "nyc": "^11.1.0",
+    "shizam": "0.0.12",
+    "standard": "^10.0.3",
+    "tape": "^4.8.0"
+  }
+}
