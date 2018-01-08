@@ -2,6 +2,8 @@
 
 # mock-package-install
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/cdaringe/mock-package-install.svg)](https://greenkeeper.io/)
+
 Generate a mock npm-like package installation.
 
 You can also update a package.json as you add/remove packages.  See [the docs](http://cdaringe.github.io/mock-package-install)!
